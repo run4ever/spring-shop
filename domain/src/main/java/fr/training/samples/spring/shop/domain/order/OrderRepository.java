@@ -1,14 +1,16 @@
 package fr.training.samples.spring.shop.domain.order;
 
-import fr.training.samples.spring.shop.domain.item.Item;
-
 import java.util.List;
 
+/**
+ * Repository for Order entity
+ */
 public interface OrderRepository {
 
-    public Order findById(String id);
+	Order findById(String orderId);
 
-    public void save(Order order);
+	void save(Order order);
 
-    List<Order> findAllByCustomerId(String customerId);
+	List<Order> findByCustomerId(String customerId);
+
 }

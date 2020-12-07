@@ -2,16 +2,23 @@ package fr.training.samples.spring.shop.domain.item;
 
 import java.util.List;
 
+/**
+ * Repository for Item entity
+ */
 public interface ItemRepository {
 
-    Item findById(String id);
+	public Item findById(String itemId);
 
-    List<Item> findById(List<String> ids);
+	public void save(Item item);
 
-    void save(Item item);
+	public List<Item> findAll();
 
-    List<Item> findAll();
-
-
+	/**
+	 * Find items according to an item identifier list
+	 *
+	 * @param ids identifier list
+	 * @return a list of items
+	 */
+	public List<Item> findById(List<String> ids);
 
 }

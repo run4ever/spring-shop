@@ -15,46 +15,67 @@ import fr.training.samples.spring.shop.domain.order.OrderRepository;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderRepository orderRepository;
+	private final OrderRepository orderRepository;
 
-    private final CustomerRepository customerRepository;
+	private final CustomerRepository customerRepository;
 
-    private final ItemRepository itemRepository;
+	private final ItemRepository itemRepository;
 
-    public OrderServiceImpl(final OrderRepository orderRepository, final CustomerRepository customerRepository,
-                            final ItemRepository itemRepository) {
-        this.orderRepository = orderRepository;
-        this.customerRepository = customerRepository;
-        this.itemRepository = itemRepository;
-    }
+	/**
+	 * Constructor for Bean injection
+	 */
+	public OrderServiceImpl(final OrderRepository orderRepository, final CustomerRepository customerRepository,
+			final ItemRepository itemRepository) {
+		this.orderRepository = orderRepository;
+		this.customerRepository = customerRepository;
+		this.itemRepository = itemRepository;
+	}
 
-    @Transactional
-    @Override
-    public Order addOrder(final String CustomerId, final List<String> itemIds) {
-        final Customer customer = customerRepository.findById(CustomerId);
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * fr.training.samples.spring.shop.application.order.OrderService#addOrder(java.
+	 * lang.String, java.util.List)
+	 */
+	@Transactional
+	@Override
+	public Order addOrder(final String CustomerId, final List<String> itemIds) {
+		final Customer customer = customerRepository.findById(CustomerId);
 
-        final Order order = new Order();
-        order.setCustomer(customer);
+		final Order order = new Order();
+		order.setCustomer(customer);
 
-        final List<Item> items = itemRepository.findById(itemIds);
-        for (final Item item : items) {
-            order.addItem(item);
-            order.setTotal(Integer.sum(order.getTotal(), item.getPrice()));
-        }
-        orderRepository.save(order);
-        return order;
-    }
+		final List<Item> items = itemRepository.findById(itemIds);
+		for (final Item item : items) {
+			order.addItem(item);
+			order.setTotal(Integer.sum(order.getTotal(), item.getPrice()));
+		}
+		orderRepository.save(order);
+		return order;
+	}
 
-    @Transactional(readOnly = true)
-    @Override
-    public Order findOne(final String orderId) {
-        return orderRepository.findById(orderId);
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * fr.training.samples.spring.shop.application.order.OrderService#findOne(java.
+	 * lang.String)
+	 */
+	@Transactional(readOnly = true)
+	@Override
+	public Order findOne(final String orderId) {
+		return orderRepository.findById(orderId);
+	}
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Order> getOrdersForCustomer(final String customerId) {
-        return orderRepository.findAllByCustomerId(customerId);
-    }
+	/*
+	 * (non-Javadoc)
+	 * @see fr.training.samples.spring.shop.application.order.OrderService#getOrdersForCustomer(java.lang.String)
+	 */
+	@Transactional(readOnly = true)
+	@Override
+	public List<Order> getOrdersForCustomer(final String customerId) {
+		return orderRepository.findByCustomerId(customerId);
+	}
 
 }

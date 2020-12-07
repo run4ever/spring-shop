@@ -1,10 +1,14 @@
 package fr.training.samples.spring.shop.domain.customer;
 
+/**
+ * Repository for customer entity
+ */
 public interface CustomerRepository {
 
-	Customer findById(String id);
+	public Customer findById(String id);
 
-	void save(Customer customer);
+	public void save(Customer customer);
 
-	Customer findByCustomerName(String name10);
+	public Customer findByCustomerName(String name);
+
 }

@@ -4,28 +4,20 @@ import java.io.Serializable;
 
 public class CustomerDto implements Serializable {
 
-	/**
-	 * serialVersionUID of type long
-	 */
+
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * customerID of type String
-	 */
+
 	private String customerID;
 
-	/**
-	 * name of type String
-	 */
+
 	private String name;
 
-	/**
-	 * password of type String
-	 */
+
 	private String password;
 
 	/**
-	 *
+	 * No-arg constructor for JavaBean tools
 	 */
 	public CustomerDto() {
 		super();

@@ -1,73 +1,72 @@
 package fr.training.samples.spring.shop.domain.order;
 
-import fr.training.samples.spring.shop.domain.customer.Customer;
-import fr.training.samples.spring.shop.domain.item.Item;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.*;
+
+import fr.training.samples.spring.shop.domain.common.entity.AbstractBaseEntity;
+import fr.training.samples.spring.shop.domain.customer.Customer;
+import fr.training.samples.spring.shop.domain.item.Item;
+
 @Entity
 @Table(name = "ORDERS")
-public class Order {
+public class Order extends AbstractBaseEntity {
 
-    @Id
-    private String id;
+	@ManyToOne
+	@JoinColumn(name = "CUSTOMER_ID")
+	private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name="CUSTOMER_ID")
-    private Customer customer;
+	//le fetch sert à lui dire de récupérer aussi le détail des items
+	@ManyToMany(targetEntity = Item.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Item> items = new ArrayList<>();
 
-    @ManyToMany(targetEntity = Item.class, cascade = CascadeType.ALL)
-    private List<Item> items = new ArrayList<>();
+	private Integer total = 0;
 
-    private Integer total = 0;
+	/**
+	 * @return the customer
+	 */
+	public Customer getCustomer() {
+		return customer;
+	}
 
-    private Integer version;
+	/**
+	 * @param customer the customer to set
+	 */
+	public void setCustomer(final Customer customer) {
+		this.customer = customer;
+	}
 
-    public String getId() {
-        return id;
-    }
+	/**
+	 * @return the items
+	 */
+	public List<Item> getItems() {
+		return items;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	/**
+	 * @param items the items to set
+	 */
+	public void setItems(final List<Item> items) {
+		this.items = items;
+	}
 
-    public Customer getCustomer() {
-        return customer;
-    }
+	/**
+	 * @return the total
+	 */
+	public Integer getTotal() {
+		return total;
+	}
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
+	/**
+	 * @param total the total to set
+	 */
+	public void setTotal(final Integer total) {
+		this.total = total;
+	}
 
+	public void addItem(final Item item) {
+		items.add(item);
+	}
 
-    public Integer getTotal() {
-        return total;
-    }
-
-    public void setTotal(final Integer total) {
-        this.total = total;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public void addItem(Item item){
-
-        items.add(item);
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
 }

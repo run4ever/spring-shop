@@ -4,26 +4,17 @@ import java.io.Serializable;
 
 public class CustomerLightDto implements Serializable {
 
-	/**
-	 * serialVersionUID of type long
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * name of type String
-	 */
 	private String name;
 
-	/**
-	 * password of type String
-	 */
 	private String password;
 
 	/**
-	 *
+	 * No-arg constructor for JavaBean tools
 	 */
 	public CustomerLightDto() {
-		super();
+
 	}
 
 	/**
@@ -37,14 +28,14 @@ public class CustomerLightDto implements Serializable {
 	}
 
 	/**
-	 * @return
+	 * @return name
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * @return
+	 * @return password
 	 */
 	public String getPassword() {
 		return password;
