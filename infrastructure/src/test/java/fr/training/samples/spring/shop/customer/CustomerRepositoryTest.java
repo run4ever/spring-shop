@@ -2,7 +2,6 @@ package fr.training.samples.spring.shop.customer;
 
 import fr.training.samples.spring.shop.domain.customer.Customer;
 import fr.training.samples.spring.shop.domain.customer.CustomerRepository;
-import fr.training.samples.spring.shop.domain.customer.CustomerRepositoryImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

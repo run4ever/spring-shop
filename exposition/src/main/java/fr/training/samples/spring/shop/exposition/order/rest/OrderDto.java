@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import fr.training.samples.spring.shop.domain.customer.Customer;
+import fr.training.samples.spring.shop.exposition.customer.rest.CustomerDto;
 import fr.training.samples.spring.shop.exposition.item.rest.ItemDto;
 
 public class OrderDto implements Serializable {
@@ -14,9 +16,12 @@ public class OrderDto implements Serializable {
 
 	private String orderId;
 
-	private String customerId;
+	private CustomerDto customer;
 
 	private List<ItemDto> items;
+
+	private int total;
+
 
 	/**
 	 * No-arg constructor for JavaBean tools
@@ -25,9 +30,9 @@ public class OrderDto implements Serializable {
 
 	}
 
-	public OrderDto(final String orderId, final String customerId) {
+	public OrderDto(final String orderId, final CustomerDto customer) {
 		this.orderId = orderId;
-		this.customerId = customerId;
+		this.customer = customer;
 		items = new ArrayList<>();
 	}
 
@@ -52,15 +57,19 @@ public class OrderDto implements Serializable {
 	/**
 	 * @return the customerId
 	 */
-	public String getCustomerId() {
-		return customerId;
+	public CustomerDto getCustomer() {
+		return customer;
 	}
 
 	/**
-	 * @param customerId the customerId to set
+	 * @param  the customerId to set
 	 */
-	public void setCustomerId(final String customerId) {
-		this.customerId = customerId;
+//	public void setCustomerId(final String customerId) {
+//		this.customerId = customerId;
+//	}
+
+	public void setCustomer(final CustomerDto customer) {
+		this.customer = customer;
 	}
 
 	/**
@@ -77,6 +86,11 @@ public class OrderDto implements Serializable {
 		this.items = items;
 	}
 
+	public void setTotal(final int total) {
+		this.total = total;
+	}
+
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -88,7 +102,7 @@ public class OrderDto implements Serializable {
 		builder.append("OrderDTO [orderId=");
 		builder.append(orderId);
 		builder.append(", customerId=");
-		builder.append(customerId);
+		builder.append(customer);
 		builder.append(", items=");
 		builder.append(items);
 		builder.append("]");

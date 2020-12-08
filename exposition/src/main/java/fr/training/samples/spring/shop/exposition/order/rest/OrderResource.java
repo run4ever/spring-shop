@@ -26,15 +26,7 @@ public class OrderResource {
         this.orderMapper = orderMapper;
     }
 
-    // c'est mieux de faire customer/{customerId}/orders et de mettre dans CustromerService
-    // autre méthode mais un peu moins bien : /orders  et en ReqsuetsParam customerId
-    // customer id : 123e4567-e89b-42d3-a456-556642440000
-    @GetMapping(value = "/orders/{customerId}", produces = { "application/json" })
-    public List<OrderDto> getAllOrdersUsingGet(@PathVariable final String customerId) {
-        final List<Order> orders = orderService.getOrdersForCustomer(customerId);
-        logger.info("Number of orders returned: {}", orders.size());
-        return orderMapper.mapToDtoList(orders);
-    }
+
 
     //ajouter un order sur un customer via postman avec OrderLightDto en entrée
     //"customerId" : "123e4567-e89b-42d3-a456-556642440000",

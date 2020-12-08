@@ -2,11 +2,12 @@ package fr.training.samples.spring.shop.infrastructure.order;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
 import fr.training.samples.spring.shop.domain.common.exception.NotFoundException;
 import fr.training.samples.spring.shop.domain.order.Order;
 import fr.training.samples.spring.shop.domain.order.OrderRepository;
+import org.springframework.stereotype.Repository;
+
+
 
 /**
  * Order Repository implementation using JPA
