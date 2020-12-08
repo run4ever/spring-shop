@@ -6,6 +6,9 @@ import fr.training.samples.spring.shop.domain.customer.Customer;
 import fr.training.samples.spring.shop.domain.order.Order;
 import fr.training.samples.spring.shop.exposition.order.rest.OrderDto;
 import fr.training.samples.spring.shop.exposition.order.rest.OrderMapper;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,8 @@ public class CustomerResource {
 
 
     //get a customer by Id - 123e4567-e89b-42d3-a456-556642440000
+    @ApiOperation(value = "Retourne les informations d'un client par son id", notes = "Veuillez fournir un identifiant customer")
+    @ApiResponses(value = {@ApiResponse(code=200, message="Ok"),@ApiResponse(code=403, message="Forbidden"), @ApiResponse(code=404, message="Client non trouvé")})
     @GetMapping(value = "/customers/{id}", produces = { "application/json" })
     public CustomerDto getCustomersUsingGet(@PathVariable final String id) {
         return customerMapper.mapToDto(customerService.findOne(id));
@@ -52,6 +57,7 @@ public class CustomerResource {
     }
 
     //update customer, via postman, exple 123e4567-e89b-42d3-a456-556642440000
+
     @PutMapping(value = "/customers/{id}", consumes = { "application/json" })
     public ResponseEntity<URI> updateCustomerUsingPut(@Valid @RequestBody final CustomerDto customerDto, @PathVariable String id) {
 
