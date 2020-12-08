@@ -4,6 +4,7 @@ import fr.training.samples.spring.shop.application.customer.CustomerService;
 import fr.training.samples.spring.shop.application.order.OrderService;
 import fr.training.samples.spring.shop.domain.customer.Customer;
 import fr.training.samples.spring.shop.domain.order.Order;
+import fr.training.samples.spring.shop.exposition.common.ErrorModel;
 import fr.training.samples.spring.shop.exposition.order.rest.OrderDto;
 import fr.training.samples.spring.shop.exposition.order.rest.OrderMapper;
 import io.swagger.annotations.ApiOperation;
@@ -46,6 +47,12 @@ public class CustomerResource {
     }
 
     //add a customer via postman, et récuperer id via postman
+    @ApiOperation(value = "This operation allow to add a new customer", nickname = "addCustomer", notes = "Please give customer infos")
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Customer was added"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found", response = ErrorModel.class),
+            @ApiResponse(code = 409, message = "Conflict", response = ErrorModel.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ErrorModel.class) })
     @PostMapping(value = "/customers", consumes = { "application/json" })
     public ResponseEntity<URI> addCustomerUsingPost(@Valid @RequestBody final CustomerLightDto customerDto) {
 

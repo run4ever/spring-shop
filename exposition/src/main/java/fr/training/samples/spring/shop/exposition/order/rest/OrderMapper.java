@@ -27,17 +27,6 @@ public class OrderMapper extends AbstractMapper<OrderDto, Order> {
         return dto;
     }
 
-    /*
-    public OrderDto mapToDto(final Order entity) {
-        final OrderDto dto = new OrderDto();
-        dto.setOrderId(entity.getId());
-        dto.setCustomer(customerMapper.mapToDto(entity.getCustomer()));
-        dto.setItems(itemMapper.mapToDtoList(entity.getItems()));
-        dto.setTotal(entity.getTotal());
-        return dto;
-    }
-     */
-
     //dans l'autre sens
     @Override
     public Order mapToEntity(OrderDto dto) {
