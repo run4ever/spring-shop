@@ -1,48 +1,42 @@
 package fr.training.samples.spring.shop.exposition.order.rest;
 
-import java.io.Serializable;
-import java.util.Set;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.List;
+
+@Validated
 public class OrderLightDto implements Serializable {
 
-	/**
-	 * serialVersionUID of type long
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * customerID of type String
-	 */
-	private String customerID;
+	private String customerId;
+
+	private List<String> itemIds;
 
 	/**
-	 * items of type Set of ItemDTO
+	 * No-arg constructor for JavaBean tools
 	 */
-	private Set<String> items;
+	public OrderLightDto() { }
 
-	/**
-	 *
-	 */
-	public OrderLightDto() {
+	@NotNull
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getCustomerID() {
-		return customerID;
+	public void setCustomerId(final String customerId) {
+		this.customerId = customerId;
 	}
 
-	public Set<String> getItems() {
-		return items;
+	@NotEmpty
+	public List<String> getItemIds() {
+		return itemIds;
 	}
 
-	public void setItems(final Set<String> items) {
-		this.items = items;
-	}
-
-	public void setCustomerID(final String customerID) {
-		this.customerID = customerID;
+	public void setItemIds(final List<String> itemIds) {
+		this.itemIds = itemIds;
 	}
 
 }

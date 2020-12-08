@@ -93,7 +93,7 @@ public class OrderServiceTest {
         final String customerId = "123e4567-e89b-42d3-a456-556642440000";
         final List<Order> orders = new ArrayList<>();
         orders.add(getNewOrder());
-        when(orderRepositoryMock.findAllByCustomerId(customerId)).thenReturn(orders);
+        when(orderRepositoryMock.findByCustomerId(customerId)).thenReturn(orders);
 
         // When
         final List<Order> expected = orderService.getOrdersForCustomer(customerId);

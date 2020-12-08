@@ -1,47 +1,42 @@
 package fr.training.samples.spring.shop.domain.item;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
+
+import fr.training.samples.spring.shop.domain.common.entity.AbstractBaseEntity;
 
 @Entity
-public class Item {
+public class Item extends AbstractBaseEntity {
 
-    @Id
-    private String id;
+	private String description;
 
-    private String description;
-    private Integer price;
-    private Integer version;
+	private Integer price;
 
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(final String description) {
+		this.description = description;
+	}
 
-    public Integer getPrice() {
-        return price;
-    }
+	/**
+	 * @return the price
+	 */
+	public Integer getPrice() {
+		return price;
+	}
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
+	/**
+	 * @param price the price to set
+	 */
+	public void setPrice(final Integer price) {
+		this.price = price;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 }

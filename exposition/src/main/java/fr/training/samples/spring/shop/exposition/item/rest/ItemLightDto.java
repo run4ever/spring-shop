@@ -1,22 +1,19 @@
 package fr.training.samples.spring.shop.exposition.item.rest;
 
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 
+@Validated
 public class ItemLightDto implements Serializable {
 
-	/**
-	 * serialVersionUID of type long
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * description of type String
-	 */
 	private String description;
 
-	/**
-	 * price of type int
-	 */
 	private int price;
 
 	/**
@@ -31,30 +28,21 @@ public class ItemLightDto implements Serializable {
 		this.price = price;
 	}
 
-	/**
-	 * @return
-	 */
+	@NotBlank
 	public String getDescription() {
 		return description;
 	}
 
-	/**
-	 * @return
-	 */
+	@NotNull
+	@Positive
 	public int getPrice() {
 		return price;
 	}
 
-	/**
-	 * @param description description
-	 */
 	public void setDescription(final String description) {
 		this.description = description;
 	}
 
-	/**
-	 * @param price price
-	 */
 	public void setPrice(final int price) {
 		this.price = price;
 	}
