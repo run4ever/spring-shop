@@ -1,8 +1,13 @@
 package fr.training.samples.spring.shop.exposition.order.rest;
 
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
+@Validated
 public class OrderLightDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -14,9 +19,9 @@ public class OrderLightDto implements Serializable {
 	/**
 	 * No-arg constructor for JavaBean tools
 	 */
-	public OrderLightDto() {
-	}
+	public OrderLightDto() { }
 
+	@NotNull
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -25,6 +30,7 @@ public class OrderLightDto implements Serializable {
 		this.customerId = customerId;
 	}
 
+	@NotEmpty
 	public List<String> getItemIds() {
 		return itemIds;
 	}
