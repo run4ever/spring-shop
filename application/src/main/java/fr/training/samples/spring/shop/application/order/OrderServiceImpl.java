@@ -2,6 +2,7 @@ package fr.training.samples.spring.shop.application.order;
 
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,8 @@ public class OrderServiceImpl implements OrderService {
 	 * fr.training.samples.spring.shop.application.order.OrderService#addOrder(java.
 	 * lang.String, java.util.List)
 	 */
+
+	@Secured("ROLE_USER")
 	@Transactional
 	@Override
 	public Order addOrder(final String CustomerId, final List<String> itemIds) {

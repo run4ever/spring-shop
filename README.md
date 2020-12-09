@@ -203,7 +203,9 @@ voir **correction** dans https://github.com/desprez/spring-shop/tree/add_order_c
 ## Documentation de l'API avec Swagger
 
 Instructions:
-> Ajouter les 2 dépendences **Springfox** dans dependency managment du pom.xml parent :
+> Sans les fichiers pom.xml, supprimer les dépendences à **org.springdoc** s'il y en a.
+
+> Ajouter les 2 dépendences **Springfox** ci-dessous dans **dependency managment** du pom.xml parent :
 
 			<dependency>
 				<groupId>io.springfox</groupId>
@@ -216,7 +218,7 @@ Instructions:
 				<version>${springfox-version}</version>
 			</dependency>
             
-> Ajouter les 2 dépendanceS **Springfox** dan les dependences du pom.xml du module **exposition**
+> Ajouter les 2 dépendances **Springfox** ci-dessous dans le pom.xml du module **exposition**
 
 		<!-- springfox-swagger2 dependencies -->
 		<dependency>
@@ -227,7 +229,81 @@ Instructions:
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 		</dependency>
-        
+
+> Ajouter les 2 classes **SwaggerConfig** et **SwaggerResource** dans le package **fr.training.samples.spring.shop.config.swagger** :
+
+	import java.time.LocalDate;
+	import java.time.ZonedDateTime;
+
+	import org.springframework.context.annotation.Bean;
+	import org.springframework.context.annotation.Configuration;
+
+	import springfox.documentation.builders.ApiInfoBuilder;
+	import springfox.documentation.builders.RequestHandlerSelectors;
+	import springfox.documentation.service.ApiInfo;
+	import springfox.documentation.service.Contact;
+	import springfox.documentation.spi.DocumentationType;
+	import springfox.documentation.spring.web.plugins.Docket;
+	import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+	@Configuration
+	@EnableSwagger2
+	public class SwaggerConfig {
+
+		@Bean
+		public Docket customImplementation() {
+
+			return new Docket(DocumentationType.SWAGGER_2).select()
+					.apis(RequestHandlerSelectors.basePackage("fr.training.samples.spring.shop.exposition")).build()
+					.directModelSubstitute(LocalDate.class, java.sql.Date.class)//
+					.directModelSubstitute(ZonedDateTime.class, java.util.Date.class) //
+					.apiInfo(apiInfo());
+		}
+
+		ApiInfo apiInfo() {
+			return new ApiInfoBuilder()//
+					.title("Swagger spring-shop") //
+					.description("No description provided") //
+					.license("Apache 2.0") //
+					.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html") //
+					.termsOfServiceUrl("") //
+					.version("1.0") //
+					.contact(new Contact("Some one", "http://localhost:8080", "SomeOne@training.org")) //
+					.build();
+		}
+	}
+
+
+
+	import org.slf4j.Logger;
+	import org.slf4j.LoggerFactory;
+	import org.springframework.stereotype.Controller;
+	import org.springframework.web.bind.annotation.RequestMapping;
+
+	/**
+	 * Resource redirection to swagger api documentation
+	 */
+	@Controller
+	public class SwaggerResource {
+
+		private static final Logger LOG = LoggerFactory.getLogger(SwaggerResource.class);
+
+		/**
+		 * Default constructor
+		 */
+		public SwaggerResource() {
+			super();
+		}
+
+		@RequestMapping(value = "/")
+		public String index() {
+			LOG.info("swagger-ui.html");
+			return "redirect:swagger-ui.html";
+		}
+
+	}
+> Lancer l'application et afficher la page http://localhost:8080/swagger-ui.html
+
 > Documenter les API de fournir une interface swagger-ui.
 
 voir **correction** dans https://github.com/desprez/spring-shop/tree/add_swagger_documentation
@@ -235,7 +311,7 @@ voir **correction** dans https://github.com/desprez/spring-shop/tree/add_swagger
 ## Exception management
 
 Instructions:
-> Dans la classe **ExceptionTranslator** du module exposition, rajouter la gestion de l'exception **AlreadyExistingException** et retourner un code erreor HTTP **409** lors de la levée de cette exception.
+> Dans la classe **ExceptionTranslator** du module **exposition**, rajouter la gestion de l'exception **AlreadyExistingException** et retourner un code erreur HTTP **409** lors de la levée de cette exception.
 > Documenter cette erreur dans la méthode de création de classe **CustomerResource**.
 
 voir **correction** dans https://github.com/desprez/spring-shop/tree/exception_management
@@ -243,20 +319,319 @@ voir **correction** dans https://github.com/desprez/spring-shop/tree/exception_m
 ## Validation
 
 Instructions:
->
+> Ajouter les contrôles de surfaces sur l'object permettant la création d'un **Item** :
+- Le prix (price) doit être positif > 0.
+- La description doit au moins contenir un caractère.
 
-voir **correction** 
+> Ajouter les contrôles de surfaces sur l'object permettant la création d'un **Customer** :
+- Le nom (name) et le mot de passe (password) doivent au moins contenir un caractère. 
 
-## MVC
+> Ajouter les contrôles de surfaces sur l'object permettant la création d'un **Order** :
+- L'identifiant du customer doit être présent.
+- La liste des identifiants doit au moins contenir un élément.
+
+voir **correction** dans https://github.com/desprez/spring-shop/tree/input_validation
+
+## Spring MVC DEMO (optionnel)
 
 Instructions:
->
 
-voir **correction** 
+> Faire un checkout de la branche https://github.com/desprez/spring-shop/tree/spring_mvc_demo
 
-## Sécurité
+> Dans une fenêtre de commande ou un terminal depuis l'IDE, lancer l'application **Back-end**, via la commande suivante dans le module **exposition** :
+
+	mvn clean install
+	cd exposition
+	mvn spring-boot:run
+	
+> Dans l'IDE lancer l'application **Front-End** via la classe **SpringBootApp** du module **presentation-mvc**.
+
+> Accèder à l'url : http://localhost:8081
+
+> Se connecter avec le compte **utilisateur** (user, password) ou le compte **administrateur** (admin, admin)> 
+
+
+## Sécurité avec Json Web Stoken (JWT)
 
 Instructions:
->
+> Ajouter la dépendence **Spring security** dans le pom.xml du module **application** :
 
-voir **correction**
+        	<!-- Spring security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
+> Ajouter les dépendences **jjwt** et **spring-security-test** dans le pom.xml du module **exposition** :
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+
+		<!-- spring-security-test dependencies -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+> ajouter la propriété suivante dans le fichier application.yml
+
+		# used to verify this hash if you have the secret key.
+		jwt:
+		  secret: spring-shop
+
+> Dans le package fr.training.samples.spring.shop.domain.customer ajouter l'énumaration suivante :
+
+	public enum RoleTypeEnum {
+		ROLE_USER, ROLE_ADMIN
+	}
+
+> Dans la classe **Customer** rajouter une proprieté **roles**  de type Set<RoleTypeEnum> annotée @ElementCollection et @Enumerated.
+
+	@ElementCollection
+	@Enumerated(EnumType.STRING)
+	Set<RoleTypeEnum> roles = new HashSet<>();
+	
+> Ajouter aussi le getter et la méthode addRole() :
+
+	public void addRole(final RoleTypeEnum role) {
+		roles.add(role);
+	}
+	
+> Dans la classe **CustomerServiceImpl** injecter un **org.springframework.security.crypto.password.PasswordEncoder**
+
+> Toujours dans cette classe, dans la méthode **create()**, utiliser ce **Passwordencoder** pour encoder le password et ajouter le Role **ROLE_USER** par défaut avant de sauvegarder le Customer:
+
+		// Encode given password
+		customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+		
+		// New customer has user role by default
+		customer.addRole(RoleTypeEnum.ROLE_USER);
+
+> Encoder aussi le password dans la méthode **update()**.
+
+> Corriger le test **CustomerServiceTest** en injectant un Mock de PasswordEncoder.
+
+> Rajouter la classe **UserDetailsServiceImpl** ci-dessous dans le package fr.training.samples.spring.shop.application.security :
+
+	import java.util.Collection;
+
+	import org.slf4j.Logger;
+	import org.slf4j.LoggerFactory;
+	import org.springframework.beans.factory.annotation.Autowired;
+	import org.springframework.security.core.GrantedAuthority;
+	import org.springframework.security.core.authority.AuthorityUtils;
+	import org.springframework.security.core.userdetails.User;
+	import org.springframework.security.core.userdetails.UserDetails;
+	import org.springframework.security.core.userdetails.UserDetailsService;
+	import org.springframework.security.core.userdetails.UsernameNotFoundException;
+	import org.springframework.stereotype.Service;
+	import org.springframework.transaction.annotation.Transactional;
+
+	import fr.training.samples.spring.shop.domain.customer.Customer;
+	import fr.training.samples.spring.shop.domain.customer.CustomerRepository;
+
+	@Service
+	@Transactional
+	public class  UserDetailsServiceImpl implements UserDetailsService {
+
+		private static Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+
+		@Autowired
+		private CustomerRepository customerRepository;
+
+		// ici je transforme mes objets du domain en objets internes de Spring Security
+		@Override
+		public UserDetails loadUserByUsername(final String customerName) throws UsernameNotFoundException {
+
+			final Customer customer = customerRepository.findByCustomerName(customerName);
+			if (customer == null) {
+				throw new UsernameNotFoundException("Email " + customerName + " not found");
+			}
+			logger.debug("Customer found with name {}", customerName);
+			return new User(customer.getName(), customer.getPassword(), getAuthorities(customer));
+		}
+
+		private static Collection<? extends GrantedAuthority> getAuthorities(final Customer customer) {
+			final String[] userRoles = customer.getRoles().stream().map((role) -> role.name()).toArray(String[]::new);
+			logger.debug("With User Roles {}", userRoles);
+			final Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
+			return authorities;
+		}
+	}
+> Ajouter la classe **SecurityConfig** dans le package fr.training.samples.spring.shop.config.security
+
+	import org.springframework.beans.factory.annotation.Autowired;
+	import org.springframework.context.annotation.Bean;
+	import org.springframework.context.annotation.Configuration;
+	import org.springframework.security.authentication.AuthenticationManager;
+	import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+	import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+	import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+	import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+	import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+	import org.springframework.security.config.http.SessionCreationPolicy;
+	import org.springframework.security.core.userdetails.UserDetailsService;
+	import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+	import org.springframework.security.crypto.password.PasswordEncoder;
+	import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+	import fr.training.samples.spring.shop.config.security.jwt.JwtAuthenticationEntryPoint;
+	import fr.training.samples.spring.shop.config.security.jwt.JwtRequestFilter;
+
+	@Configuration
+	@EnableWebSecurity
+    @EnableGlobalMethodSecurity(securedEnabled = true, proxyTargetClass = true)
+	public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+		@Autowired
+		private UserDetailsService userDetailsService;
+
+		@Autowired
+		private JwtRequestFilter jwtRequestFilter;
+
+		@Autowired
+		private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+		@Override
+		public void configure(final AuthenticationManagerBuilder auth) throws Exception {
+			auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		}
+
+		@Bean
+		public PasswordEncoder passwordEncoder() {
+			return new BCryptPasswordEncoder();
+		}
+
+		@Bean
+		@Override
+		public AuthenticationManager authenticationManagerBean() throws Exception {
+			return super.authenticationManagerBean();
+		}
+
+		@Override
+		protected void configure(final HttpSecurity httpSecurity) throws Exception {
+			// Add a filter to validate the tokens with every request
+			httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+			httpSecurity.csrf().disable()
+			// dont authenticate this authentication request
+			.authorizeRequests().antMatchers("/authenticate").permitAll()
+			// and authorize swagger-ui
+			.antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+			// all other requests need to be authenticated
+			.anyRequest().authenticated().and().
+			// make sure we use stateless session; session won't be used to
+			// store user's state.
+			exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint) //
+			.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		}
+	}
+> Ajouter les classes JwtAuthenticationController, JwtAuthenticationEntryPoint, JwtRequest, JwtRequestFilter, JwtResponse, JwtTokenManager pour la gestion du JWT. (voir branche)
+
+> Insérer l'utilisateur **Admin** dans la base de données avec son rôle dans les tables **CUSTOMER** et **CUSTOMER_ROLES**  :
+
+	INSERT INTO CUSTOMER (ID, NAME, PASSWORD,VERSION) VALUES ('bd20a450-dee7-4253-bf48-7fee4d0cebc6', 'Admin', '$2a$10$hKDVYxLefVHV/vtuPhWD3OigtRyOykRLDdUAp80Z1crSoS1lFqaFS',0);
+	INSERT INTO CUSTOMER_ROLES(CUSTOMER_ID, ROLES) VALUES ('bd20a450-dee7-4253-bf48-7fee4d0cebc6','ROLE_ADMIN');
+
+> Ajouter dans la classe **ExceptionTranslator**, la prise en compte de l'exception **AccessDeniedException** :
+
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseBody
+	public ResponseEntity<Object> accessDeniedExceptionHandler(final AccessDeniedException ex) {
+
+		final ErrorModel apiError = ErrorModel.builder() //
+				.message(ex.getLocalizedMessage()) //
+				.description("You have'nt access privilege to this operation")//
+				.build();
+
+		LOG.debug(ex.getMessage());
+
+		return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
+	}
+
+> Dans la classe SwaggerConfig, rajouter les mécanismes permettant de saisir le token :
+
+				.securityContexts(Arrays.asList(securityContext())) //
+				.securitySchemes(Arrays.asList(apiKey()));
+				
+
+        private ApiKey apiKey() {
+		return new ApiKey("JWT", AUTHORIZATION_HEADER, "header");
+	}
+
+	private SecurityContext securityContext() {
+		return SecurityContext.builder().securityReferences(defaultAuth()).build();
+	}
+
+	List<SecurityReference> defaultAuth() {
+		final AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
+		final AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+		authorizationScopes[0] = authorizationScope;
+		return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+	}
+				
+
+> Ajouter les annotations **@Secured("ROLE_USER")** et **@Secured("ROLE_ADMIN")** pour que :
+- Seul un administrateur puisse créer un nouvel item.
+- Seuls les customers peuvent créer des commandes et modifier leur compte.
+
+> Postman POST http://localhost:8080/authenticate
+- Avec body : {"username": "Admin","password":"admin"}
+- Récupérer le token et faire un get Items ou autre via le swagger
+
+voir **correction** dans https://github.com/desprez/spring-shop/tree/spring_security_jwt
+
+## Spring Actuator
+Instructions:
+
+> Repartir de la branche https://github.com/desprez/spring-shop/tree/input_validation
+
+> Vérifier la présence de la dépendence **spring-boot-actuator** dans le module **Exposition** :
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		
+> Ajouter les endpoints **actuator** dans le fichier application.yml :
+
+	#Monitoring endpoints   
+	management:
+	  endpoints:
+	    web:
+	      exposure:
+		include: info, health, configprops, logfile, metrics, env, loggers
+
+> Exposer les métriques de chaque contrôleur REST à l’aide de l’annotation @Timed
+
+> Accéder au différentes urls d’actuator
+
+voir **correction** dans https://github.com/desprez/spring-shop/tree/springboot_actuator
+
+## Spring AOP
+Instructions:
+
+> Vérifier la présence de la dépendence **spring-boot-aop** dans le module **Exposition** :
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		
+> Ajouter la classe de configuration de AOP
+
+	import org.springframework.context.annotation.Configuration;
+	import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+	@Configuration
+	@EnableAspectJAutoProxy
+	public class AOPConfiguration {
+	}
+
+> Ajouter un aspect
+
+voir **correction** dans https://github.com/desprez/spring-shop/tree/add_aspect

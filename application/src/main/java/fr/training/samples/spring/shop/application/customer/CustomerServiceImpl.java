@@ -1,5 +1,9 @@
 package fr.training.samples.spring.shop.application.customer;
 
+import fr.training.samples.spring.shop.domain.customer.RoleTypeEnum;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,14 +16,11 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-	private final CustomerRepository customerRepository;
+	@Autowired
+	private CustomerRepository customerRepository;
 
-	/**
-	 * Constructor for Bean injection
-	 */
-	public CustomerServiceImpl(final CustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
-	}
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	/*
 	 * (non-Javadoc)
@@ -36,6 +37,13 @@ public class CustomerServiceImpl implements CustomerService {
 		if (existingCustomer != null) {
 			throw new AlreadyExistingException("A customer with this name already exist");
 		}
+
+		// Encode given password
+		customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+
+		// New customer has user role by default
+		customer.addRole(RoleTypeEnum.ROLE_USER);
+
 		customerRepository.save(customer);
 
 		return customer;
@@ -62,9 +70,17 @@ public class CustomerServiceImpl implements CustomerService {
 	 * fr.training.samples.spring.shop.domain.customer.Customer)
 	 */
 
+	@Secured("ROLE_USER")
 	@Transactional
 	@Override
 	public void update(final Customer customer) {
+
+		// Encode given password
+		customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+
+		// New customer has user role by default
+		customer.addRole(RoleTypeEnum.ROLE_USER);
+
 		customerRepository.save(customer);
 
 	}
