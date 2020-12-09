@@ -71,4 +71,12 @@ public class Customer extends AbstractBaseEntity {
 		this.password = password;
 	}
 
+	@Override
+	public String toString() {
+		return "Customer{" +
+				"name='" + name + '\'' +
+				", password='" + password + '\'' +
+				", id='" + id + '\'' +
+				'}';
+	}
 }
