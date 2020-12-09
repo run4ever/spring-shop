@@ -19,3 +19,10 @@ logging:
     ROOT: INFO
     org.springframework: INFO
     fr.training.samples.spring.shop: INFO
+
+#Monitoring endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+  include: info, health, configprops, logfile, metrics, env, loggers, httptrace
